@@ -10,3 +10,9 @@ import { RouterOutlet } from '@angular/router';
 export class App {
   protected readonly title = signal('todo');
 }
+
+export type Task = {
+  id: number;
+  name: string;
+  done: boolean;
+};

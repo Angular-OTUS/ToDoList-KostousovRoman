@@ -1,0 +1,11 @@
+<li class="item" [class]="{ done: task().done }" animate.enter="pop-in">
+  <span>{{ task().name }}</span>
+  <div class="item-controls">
+    <mat-checkbox
+      class="done"
+      [checked]="task().done"
+      (change)="toggleDone(task())"
+    ></mat-checkbox>
+    <mat-icon class="button-delete" (click)="remove.emit(task().id)">delete</mat-icon>
+  </div>
+</li>

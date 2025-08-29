@@ -1,0 +1,46 @@
+.item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-left: 5px solid #3c166d;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 10px;
+    background-color: rgba(0, 0, 0, 0.2);
+    overflow-wrap: anywhere;
+}
+
+.item.done {
+    opacity: 0.5;
+    background-color: rgba(0, 255, 0, 0.2);
+}
+
+.item.done > span {
+    text-decoration: line-through;
+}
+
+.item-controls {
+    display: flex;
+    align-items: center;
+}
+
+.button-delete {
+    cursor: pointer;
+    color: #ffbcbc;
+}
+
+.pop-in {
+    animation: pop-in 0.3s;
+}
+
+@keyframes pop-in {
+    0% {
+        transform: scaleY(0);
+    }
+    30% {
+        transform: scaleY(1.1);
+    }
+    100% {
+        transform: scaleY(1);
+    }
+}
