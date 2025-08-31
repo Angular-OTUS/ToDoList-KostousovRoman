@@ -1,60 +1,80 @@
-import { Component } from '@angular/core';
-import { MatCheckbox } from '@angular/material/checkbox';
+import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { MatIcon } from '@angular/material/icon';
 import { MatIconModule } from '@angular/material/icon';
 import { FormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { ToDoListItem } from '../to-do-list-item/to-do-list-item';
+import { Task } from '../app';
 
 @Component({
   selector: 'app-to-do-list',
   imports: [
-    MatCheckbox,
     MatIcon,
     MatIconModule,
     FormsModule,
     MatFormFieldModule,
     MatInputModule,
+    ToDoListItem,
   ],
   templateUrl: './to-do-list.html',
   styleUrl: './to-do-list.css',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ToDoList {
   protected tasks: Task[] = [
     {
+      id: 1,
       name: 'Buy milk',
       done: false,
     },
     {
+      id: 2,
       name: 'Buy bread',
       done: false,
     },
     {
+      id: 3,
+      name: 'Feed the dog',
+      done: false,
+    },
+    {
+      id: 4,
       name: 'Make ToDo app',
       done: true,
     },
   ];
 
-  protected inputValue = '';
+  protected inputValue = signal('');
 
-  protected deleteTask(task: Task) {
-    this.tasks = this.tasks.filter((t) => t !== task);
-  }
-
-  protected toggleDone(task: Task) {
-    task.done = !task.done;
+  protected currentPage = signal(1);
+  protected pageSize = signal(3);
+  protected get totalPages() {
+    return Math.ceil(this.tasks.length / this.pageSize());
   }
 
   protected addTask() {
     this.tasks.push({
-      name: this.inputValue,
+      id: Math.max(...this.tasks.map((t) => t.id)) + 1,
+      name: this.inputValue(),
       done: false,
     });
-    this.inputValue = '';
+    this.inputValue.set('');
+  }
+
+  protected deleteTask(id: Task['id']) {
+    this.tasks = this.tasks.filter((t) => t.id !== id);
+  }
+
+  protected previousPage() {
+    if (this.currentPage() > 1) {
+      this.currentPage.update((v) => v - 1);
+    }
+  }
+
+  protected nextPage() {
+    if (this.currentPage() < this.totalPages) {
+      this.currentPage.update((v) => v + 1);
+    }
   }
 }
-
-type Task = {
-  name: string;
-  done: boolean;
-};
