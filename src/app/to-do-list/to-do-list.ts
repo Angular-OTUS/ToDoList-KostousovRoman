@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, signal } from '@angular/core';
 import { MatIcon } from '@angular/material/icon';
 import { MatIconModule } from '@angular/material/icon';
 import { FormsModule } from '@angular/forms';
@@ -6,6 +6,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { ToDoListItem } from '../to-do-list-item/to-do-list-item';
 import { Task } from '../app';
+import { Button } from '../shared/button/button';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-to-do-list',
@@ -16,12 +18,14 @@ import { Task } from '../app';
     MatFormFieldModule,
     MatInputModule,
     ToDoListItem,
+    Button,
+    MatProgressSpinnerModule,
   ],
   templateUrl: './to-do-list.html',
   styleUrl: './to-do-list.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ToDoList {
+export class ToDoList implements OnInit {
   protected tasks: Task[] = [
     {
       id: 1,
@@ -53,6 +57,14 @@ export class ToDoList {
     return Math.ceil(this.tasks.length / this.pageSize());
   }
 
+  protected isLoading = signal(true);
+
+  ngOnInit() {
+    setTimeout(() => {
+      this.isLoading.set(false);
+    }, 500);
+  }
+
   protected addTask() {
     this.tasks.push({
       id: Math.max(...this.tasks.map((t) => t.id)) + 1,
@@ -63,7 +75,7 @@ export class ToDoList {
   }
 
   protected deleteTask(id: Task['id']) {
-    this.tasks = this.tasks.filter((t) => t.id !== id);
+    this.tasks = this.tasks.filter((t: Task) => t.id !== id);
   }
 
   protected previousPage() {
