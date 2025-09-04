@@ -8,17 +8,19 @@
     </div>
   </div>
 
+  @if (!isLoading()) {
   <ul>
-    @for (task of tasks.slice((currentPage() - 1) * pageSize(), currentPage() * pageSize()); track task.id) {
+    @for (task of tasks.slice((currentPage() - 1) * pageSize(), currentPage() * pageSize()); track
+    task.id) {
     <app-to-do-list-item [task]="task" (remove)="deleteTask(task.id)"></app-to-do-list-item>
     }
   </ul>
+  } @else {
+  <mat-spinner></mat-spinner>
+  }
 
   <div class="card-footer">
-    <!-- <input class="task-input" type="text" [(ngModel)]="inputValue" /> -->
-    <mat-form-field>
-      <input type="text" matInput [(ngModel)]="inputValue" />
-    </mat-form-field>
-    <button class="button-add" (click)="addTask();" [disabled]="!inputValue().trim()">Add Task</button>
+    <input class="task-input" type="text" [(ngModel)]="inputValue" />
+    <app-button (click)="addTask()" [disabled]="!inputValue().trim()">Add Task</app-button>
   </div>
 </div>

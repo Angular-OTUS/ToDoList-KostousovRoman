@@ -9,6 +9,10 @@ html {
     background: linear-gradient(to bottom right, #9972fb, #eed4ff);
 }
 
-body { 
-    font-family: Roboto, "Helvetica Neue", sans-serif; 
+body {
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+mat-spinner circle {
+    stroke: #fff;
 }
