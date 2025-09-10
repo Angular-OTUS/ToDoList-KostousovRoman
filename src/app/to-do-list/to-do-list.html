@@ -2,17 +2,17 @@
   <div class="card-header">
     <h1>To Do List</h1>
     <div class="pagination">
-      <mat-icon class="pointer" (click)="previousPage()">keyboard_arrow_left</mat-icon>
+      <mat-icon appTitle="Previous page" class="pointer" (click)="previousPage()">keyboard_arrow_left</mat-icon>
       <span>{{ currentPage() }} / {{ totalPages }}</span>
-      <mat-icon class="pointer" (click)="nextPage()">keyboard_arrow_right</mat-icon>
+      <mat-icon appTitle="Next page" class="pointer" (click)="nextPage()">keyboard_arrow_right</mat-icon>
     </div>
   </div>
 
   @if (!isLoading()) {
   <ul>
-    @for (task of tasks.slice((currentPage() - 1) * pageSize(), currentPage() * pageSize()); track
-    task.id) {
-    <app-to-do-list-item [task]="task" (remove)="deleteTask(task.id)"></app-to-do-list-item>
+    @for (task of getSlicedTasks(); track task.id) {
+    <app-to-do-list-item [task]="task" (select)="selectItem(task.id)" [selected]="selectedItemId() === task.id"
+      (remove)="deleteTask(task.id)"></app-to-do-list-item>
     }
   </ul>
   } @else {
@@ -20,7 +20,7 @@
   }
 
   <div class="card-footer">
-    <input class="task-input" type="text" [(ngModel)]="inputValue" />
-    <app-button (click)="addTask()" [disabled]="!inputValue().trim()">Add Task</app-button>
+    <input class="task-input" type="text" [(ngModel)]="inputValue" (keyup.enter)="addTask()" />
+    <app-button appTitle="Add" (click)="addTask()" [disabled]="validateInputValue()">Add Task</app-button>
   </div>
 </div>

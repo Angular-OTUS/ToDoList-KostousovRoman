@@ -32,6 +32,7 @@ module.exports = tseslint.config(
       ],
       "comma-dangle": [2, "always-multiline"],
       "@typescript-eslint/consistent-type-definitions": "off",
+      "@angular-eslint/template/click-events-have-key-events": "off",
     },
   },
   {

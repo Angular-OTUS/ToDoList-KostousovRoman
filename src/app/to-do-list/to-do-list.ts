@@ -8,6 +8,7 @@ import { ToDoListItem } from '../to-do-list-item/to-do-list-item';
 import { Task } from '../app';
 import { Button } from '../shared/button/button';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { Title } from '../shared/title/title';
 
 @Component({
   selector: 'app-to-do-list',
@@ -20,6 +21,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     ToDoListItem,
     Button,
     MatProgressSpinnerModule,
+    Title,
   ],
   templateUrl: './to-do-list.html',
   styleUrl: './to-do-list.css',
@@ -31,6 +33,7 @@ export class ToDoList implements OnInit {
       id: 1,
       name: 'Buy milk',
       done: false,
+      description: 'Buy milk from the store',
     },
     {
       id: 2,
@@ -58,6 +61,7 @@ export class ToDoList implements OnInit {
   }
 
   protected isLoading = signal(true);
+  protected selectedItemId = signal<Task['id'] | null>(null);
 
   ngOnInit() {
     setTimeout(() => {
@@ -88,5 +92,23 @@ export class ToDoList implements OnInit {
     if (this.currentPage() < this.totalPages) {
       this.currentPage.update((v) => v + 1);
     }
+  }
+
+  protected getSlicedTasks() {
+    const page = this.currentPage();
+    const pageSize = this.pageSize();
+    return this.tasks.slice((page - 1) * pageSize, page * pageSize);
+  }
+
+  protected validateInputValue() {
+    return !this.inputValue().trim();
+  }
+
+  protected selectItem(id: Task['id']) {
+    if (this.selectedItemId() === id) {
+      this.selectedItemId.set(null);
+      return;
+    }
+    this.selectedItemId.set(id);
   }
 }
