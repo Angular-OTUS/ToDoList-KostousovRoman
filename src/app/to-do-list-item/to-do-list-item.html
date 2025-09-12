@@ -1,7 +1,10 @@
-<li class="item" [class]="{ done: task().done }" animate.enter="pop-in">
-  <span>{{ task().name }}</span>
+<li class="item" [class]="{ done: task().done, selected: selected() }" animate.enter="pop-in">
+  <div class="item-content">
+    <h1 (click)="select.emit(task().id)">{{ task().name }}</h1>
+    <textarea [hidden]="!selected()" (change)="changeDescription($event)">{{ task().description }}</textarea>
+  </div>
   <div class="item-controls">
-    <mat-checkbox class="done" [checked]="task().done" (change)="toggleDone(task())"></mat-checkbox>
-    <mat-icon class="button-delete" (click)="remove.emit(task().id)">delete</mat-icon>
+    <mat-checkbox appTitle="Done" class="done" [checked]="task().done" (change)="toggleDone(task())"></mat-checkbox>
+    <mat-icon appTitle="Delete" class="button-delete" (click)="remove.emit(task().id)">delete</mat-icon>
   </div>
 </li>
