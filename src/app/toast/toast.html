@@ -1,0 +1,8 @@
+<ul>
+    @for (toast of toasts; track toast.id) {
+    <li [class]="toast.type">
+        <mat-icon>{{ getIcon(toast.type) }}</mat-icon>
+        <span>{{ toast.message }}</span>
+    </li>
+    }
+</ul>
