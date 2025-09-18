@@ -1,0 +1,29 @@
+ul {
+    list-style: none;
+    position: absolute;
+    top: 15px;
+    right: 15px;
+}
+
+li {
+    color: #fff;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    width: 200px;
+}
+
+li.success {
+    background-color: rgba(0, 255, 0, 0.4);
+}
+
+li.warning {
+    background-color: rgba(255, 255, 0, 0.4);
+}
+
+li.error {
+    background-color: rgba(255, 0, 0, 0.4);
+}
