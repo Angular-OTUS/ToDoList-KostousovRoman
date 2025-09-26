@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnInit, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
 import { MatIcon } from '@angular/material/icon';
 import { MatIconModule } from '@angular/material/icon';
 import { FormsModule } from '@angular/forms';
@@ -9,6 +9,8 @@ import { Task } from '../app';
 import { Button } from '../shared/button/button';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { Title } from '../shared/title/title';
+import { TaskListService } from '../services/task-list';
+import { ToastService } from '../services/toast';
 
 @Component({
   selector: 'app-to-do-list',
@@ -28,30 +30,8 @@ import { Title } from '../shared/title/title';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ToDoList implements OnInit {
-  protected tasks: Task[] = [
-    {
-      id: 1,
-      name: 'Buy milk',
-      done: false,
-      description: 'Buy milk from the store',
-    },
-    {
-      id: 2,
-      name: 'Buy bread',
-      done: false,
-    },
-    {
-      id: 3,
-      name: 'Feed the dog',
-      done: false,
-    },
-    {
-      id: 4,
-      name: 'Make ToDo app',
-      done: true,
-    },
-  ];
-
+  protected readonly taskListService = inject(TaskListService);
+  protected readonly toastService = inject(ToastService);
   protected inputValue = signal('');
 
   protected currentPage = signal(1);
@@ -62,6 +42,7 @@ export class ToDoList implements OnInit {
 
   protected isLoading = signal(true);
   protected selectedItemId = signal<Task['id'] | null>(null);
+  protected editTitleId = signal<Task['id'] | null>(null);
 
   ngOnInit() {
     setTimeout(() => {
@@ -69,28 +50,40 @@ export class ToDoList implements OnInit {
     }, 500);
   }
 
+  protected get tasks() {
+    return this.taskListService.getTasks();
+  }
+
   protected addTask() {
-    this.tasks.push({
+    this.taskListService.addTask({
       id: Math.max(...this.tasks.map((t) => t.id)) + 1,
       name: this.inputValue(),
       done: false,
     });
+
     this.inputValue.set('');
+
+    this.toastService.add({ message: 'Task added', type: 'success' });
   }
 
   protected deleteTask(id: Task['id']) {
-    this.tasks = this.tasks.filter((t: Task) => t.id !== id);
+    this.taskListService.deleteTask(id);
+    this.toastService.add({ message: `Task ${id} deleted`, type: 'success' });
   }
 
   protected previousPage() {
     if (this.currentPage() > 1) {
       this.currentPage.update((v) => v - 1);
+    } else {
+      this.toastService.add({ message: 'Minimum page reached', type: 'warning' });
     }
   }
 
   protected nextPage() {
     if (this.currentPage() < this.totalPages) {
       this.currentPage.update((v) => v + 1);
+    } else {
+      this.toastService.add({ message: 'Maximum page reached', type: 'warning' });
     }
   }
 
@@ -110,5 +103,9 @@ export class ToDoList implements OnInit {
       return;
     }
     this.selectedItemId.set(id);
+  }
+
+  protected setEditTitleId(id: Task['id']) {
+    this.editTitleId.set(id);
   }
 }
