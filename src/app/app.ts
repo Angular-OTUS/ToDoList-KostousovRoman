@@ -19,8 +19,8 @@ export type Task = {
   description?: string;
 };
 
-export type ToastType = {
+export interface ToastType {
   message: string;
   type: 'success' | 'warning' | 'error';
   id?: number;
-};
+}

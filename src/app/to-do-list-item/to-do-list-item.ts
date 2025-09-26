@@ -1,4 +1,12 @@
-import { ChangeDetectionStrategy, Component, inject, input, output, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  input,
+  model,
+  output,
+  signal,
+} from '@angular/core';
 import { MatCheckbox } from '@angular/material/checkbox';
 import { MatIcon, MatIconModule } from '@angular/material/icon';
 import { Task } from '../app';
@@ -19,9 +27,10 @@ export class ToDoListItem {
   task = input.required<Task>();
   remove = output<Task['id']>();
   select = output<Task['id']>();
+  setEditTitleId = output<Task['id'] | null>();
   selected = input(false);
+  editTitle = model<boolean>(false);
 
-  protected editTitleMode = signal(false);
   protected taskTitle = signal('');
 
   protected toggleDone(task: Task) {
@@ -32,13 +41,9 @@ export class ToDoListItem {
     this.task().description = (event.target as HTMLTextAreaElement).value;
   }
 
-  protected toggleMode() {
-    this.editTitleMode.update((v) => !v);
-  }
-
   protected saveTitle() {
     this.task().name = this.taskTitle();
-    this.editTitleMode.set(false);
+    this.editTitle.set(false);
     this.taskTitle.set('');
     this.toastService.add({ message: `Task title changed`, type: 'success' });
   }

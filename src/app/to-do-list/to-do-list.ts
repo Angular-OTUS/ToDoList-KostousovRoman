@@ -9,7 +9,7 @@ import { Task } from '../app';
 import { Button } from '../shared/button/button';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { Title } from '../shared/title/title';
-import { TaskListService } from '../services/task';
+import { TaskListService } from '../services/task-list';
 import { ToastService } from '../services/toast';
 
 @Component({
@@ -42,6 +42,7 @@ export class ToDoList implements OnInit {
 
   protected isLoading = signal(true);
   protected selectedItemId = signal<Task['id'] | null>(null);
+  protected editTitleId = signal<Task['id'] | null>(null);
 
   ngOnInit() {
     setTimeout(() => {
@@ -102,5 +103,9 @@ export class ToDoList implements OnInit {
       return;
     }
     this.selectedItemId.set(id);
+  }
+
+  protected setEditTitleId(id: Task['id']) {
+    this.editTitleId.set(id);
   }
 }

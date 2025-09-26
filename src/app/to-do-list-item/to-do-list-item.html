@@ -1,22 +1,22 @@
 <li class="item" [class]="{ done: task().done, selected: selected() }" animate.enter="pop-in">
-  <div class="item-content">
-    @if (editTitleMode()) {
-    <input type="text" [(ngModel)]="taskTitle" />
-    } @else {
-    <h1 (dblclick)="toggleMode()" (click)="select.emit(task().id)">{{ task().name }}</h1>
-    }
-    <textarea [hidden]="!selected()" (change)="changeDescription($event)">{{ task().description }}</textarea>
-  </div>
+    <div class="item-content">
+        @if (editTitle()) {
+        <input type="text" [(ngModel)]="taskTitle" />
+        } @else {
+        <h1 (dblclick)="setEditTitleId.emit(task().id)" (click)="select.emit(task().id)">{{ task().name }}</h1>
+        }
+        <textarea [hidden]="!selected()" (change)="changeDescription($event)">{{ task().description }}</textarea>
+    </div>
 
-  @if (editTitleMode()) {
-  <div class="item-controls">
-    <mat-icon appTitle="Save" (click)="saveTitle()">save</mat-icon>
-    <mat-icon appTitle="Cancel" (click)="toggleMode()">cancel</mat-icon>
-  </div>
-  } @else {
-  <div class="item-controls">
-    <mat-checkbox appTitle="Done" class="done" [checked]="task().done" (change)="toggleDone(task())"></mat-checkbox>
-    <mat-icon appTitle="Delete" class="button-delete" (click)="remove.emit(task().id)">delete</mat-icon>
-  </div>
-  }
+    @if (editTitle()) {
+    <div class="item-controls">
+        <mat-icon appTitle="Save" (click)="saveTitle()">save</mat-icon>
+        <mat-icon appTitle="Cancel" (click)="setEditTitleId.emit(null)">cancel</mat-icon>
+    </div>
+    } @else {
+    <div class="item-controls">
+        <mat-checkbox appTitle="Done" class="done" [checked]="task().done" (change)="toggleDone(task())"></mat-checkbox>
+        <mat-icon appTitle="Delete" class="button-delete" (click)="remove.emit(task().id)">delete</mat-icon>
+    </div>
+    }
 </li>
