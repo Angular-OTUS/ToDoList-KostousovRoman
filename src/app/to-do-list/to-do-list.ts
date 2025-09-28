@@ -6,11 +6,12 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { ToDoListItem } from '../to-do-list-item/to-do-list-item';
 import { Task } from '../app';
-import { Button } from '../shared/button/button';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { Title } from '../shared/title/title';
 import { TaskListService } from '../services/task-list';
 import { ToastService } from '../services/toast';
+import { ToDoCreateItem } from '../to-do-create-item/to-do-create-item';
+import { TaskApiService } from '../services/task-api';
 
 @Component({
   selector: 'app-to-do-list',
@@ -21,9 +22,9 @@ import { ToastService } from '../services/toast';
     MatFormFieldModule,
     MatInputModule,
     ToDoListItem,
-    Button,
     MatProgressSpinnerModule,
     Title,
+    ToDoCreateItem,
   ],
   templateUrl: './to-do-list.html',
   styleUrl: './to-do-list.css',
@@ -31,44 +32,42 @@ import { ToastService } from '../services/toast';
 })
 export class ToDoList implements OnInit {
   protected readonly taskListService = inject(TaskListService);
+  protected readonly taskApiService = inject(TaskApiService);
   protected readonly toastService = inject(ToastService);
-  protected inputValue = signal('');
 
   protected currentPage = signal(1);
   protected pageSize = signal(3);
   protected get totalPages() {
-    return Math.ceil(this.tasks.length / this.pageSize());
+    return Math.ceil(this.getFilteredTasks().length / this.pageSize());
   }
 
   protected isLoading = signal(true);
   protected selectedItemId = signal<Task['id'] | null>(null);
   protected editTitleId = signal<Task['id'] | null>(null);
 
+  protected filter = signal<Task['status'] | 'all'>('all');
+
   ngOnInit() {
-    setTimeout(() => {
-      this.isLoading.set(false);
-    }, 500);
+    this.fetchTasks();
   }
 
   protected get tasks() {
     return this.taskListService.getTasks();
   }
 
-  protected addTask() {
-    this.taskListService.addTask({
-      id: Math.max(...this.tasks.map((t) => t.id)) + 1,
-      name: this.inputValue(),
-      done: false,
+  fetchTasks() {
+    this.isLoading.set(true);
+    this.taskApiService.getTasks().subscribe((tasks: Task[]) => {
+      this.taskListService.setTasks(tasks);
+      this.isLoading.set(false);
     });
-
-    this.inputValue.set('');
-
-    this.toastService.add({ message: 'Task added', type: 'success' });
   }
 
   protected deleteTask(id: Task['id']) {
-    this.taskListService.deleteTask(id);
-    this.toastService.add({ message: `Task ${id} deleted`, type: 'success' });
+    this.taskApiService.deleteTask(id).subscribe(() => {
+      this.fetchTasks();
+      this.toastService.add({ message: `Task ${id} deleted`, type: 'success' });
+    });
   }
 
   protected previousPage() {
@@ -90,11 +89,16 @@ export class ToDoList implements OnInit {
   protected getSlicedTasks() {
     const page = this.currentPage();
     const pageSize = this.pageSize();
-    return this.tasks.slice((page - 1) * pageSize, page * pageSize);
+    return this.getFilteredTasks().slice((page - 1) * pageSize, page * pageSize);
   }
 
-  protected validateInputValue() {
-    return !this.inputValue().trim();
+  protected getFilteredTasks() {
+    if (this.filter() === 'all') {
+      return this.tasks;
+    }
+    return this.tasks.filter((t) => {
+      return t.status === this.filter();
+    });
   }
 
   protected selectItem(id: Task['id']) {
@@ -105,7 +109,11 @@ export class ToDoList implements OnInit {
     this.selectedItemId.set(id);
   }
 
-  protected setEditTitleId(id: Task['id']) {
+  protected setEditTitleId(id: Task['id'] | null) {
+    if (this.editTitleId() === id) {
+      this.editTitleId.set(null);
+      return;
+    }
     this.editTitleId.set(id);
   }
 }

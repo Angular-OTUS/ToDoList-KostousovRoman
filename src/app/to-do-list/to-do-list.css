@@ -33,21 +33,6 @@ h1 {
     color: #fff;
 }
 
-.card-footer {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.task-input {
-    padding: 10px;
-    border-radius: 5px;
-    border: none;
-    background-color: rgba(0, 0, 0, 0.2);
-    color: #fff;
-    font-size: 1.1rem;
-}
-
 .task-input:focus {
     outline: none;
     background-color: rgba(0, 0, 0, 0.4);
@@ -64,4 +49,13 @@ h1 {
 
 mat-spinner {
     align-self: center;
+}
+
+select {
+    padding: 5px;
+    border-radius: 5px;
+    border: none;
+    background-color: rgba(0, 0, 0, 0.4);
+    color: #fff;
+    font-size: 1.1rem;
 }

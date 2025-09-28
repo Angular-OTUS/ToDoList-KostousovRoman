@@ -1,4 +1,4 @@
-<li class="item" [class]="{ done: task().done, selected: selected() }" animate.enter="pop-in">
+<li class="item" [class]="{ done: task().status === 'completed', selected: selected() }" animate.enter="pop-in">
     <div class="item-content">
         @if (editTitle()) {
         <input type="text" [(ngModel)]="taskTitle" />
@@ -11,11 +11,12 @@
     @if (editTitle()) {
     <div class="item-controls">
         <mat-icon appTitle="Save" (click)="saveTitle()">save</mat-icon>
-        <mat-icon appTitle="Cancel" (click)="setEditTitleId.emit(null)">cancel</mat-icon>
+        <mat-icon appTitle="Cancel" (click)="cancelEditing()">cancel</mat-icon>
     </div>
     } @else {
     <div class="item-controls">
-        <mat-checkbox appTitle="Done" class="done" [checked]="task().done" (change)="toggleDone(task())"></mat-checkbox>
+        <mat-checkbox appTitle="Done" class="done" [checked]="task().status === 'completed'"
+            (change)="toggleDone(task())"></mat-checkbox>
         <mat-icon appTitle="Delete" class="button-delete" (click)="remove.emit(task().id)">delete</mat-icon>
     </div>
     }
