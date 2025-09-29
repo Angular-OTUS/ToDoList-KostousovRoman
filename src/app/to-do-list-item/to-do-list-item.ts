@@ -13,6 +13,8 @@ import { Task } from '../app';
 import { Title } from '../shared/title/title';
 import { FormsModule } from '@angular/forms';
 import { ToastService } from '../services/toast';
+import { TaskApiService } from '../services/task-api';
+import { TaskListService } from '../services/task-list';
 
 @Component({
   selector: 'app-to-do-list-item',
@@ -23,28 +25,39 @@ import { ToastService } from '../services/toast';
 })
 export class ToDoListItem {
   protected readonly toastService = inject(ToastService);
+  protected readonly taskListService = inject(TaskListService);
+  protected readonly taskApiService = inject(TaskApiService);
 
   task = input.required<Task>();
   remove = output<Task['id']>();
   select = output<Task['id']>();
   setEditTitleId = output<Task['id'] | null>();
   selected = input(false);
-  editTitle = model<boolean>(false);
+  editTitle = input.required<boolean>();
 
   protected taskTitle = signal('');
 
   protected toggleDone(task: Task) {
-    task.done = !task.done;
+    task.status = task.status === 'inProgress' ? 'completed' : 'inProgress';
+    this.taskApiService.updateTask(task).subscribe(() => {});
   }
 
   protected changeDescription(event: Event) {
     this.task().description = (event.target as HTMLTextAreaElement).value;
+    this.taskApiService.updateTask(this.task()).subscribe(() => {});
   }
 
   protected saveTitle() {
     this.task().name = this.taskTitle();
-    this.editTitle.set(false);
     this.taskTitle.set('');
-    this.toastService.add({ message: `Task title changed`, type: 'success' });
+    this.setEditTitleId.emit(null);
+    this.taskApiService.updateTask(this.task()).subscribe(() => {
+      this.toastService.add({ message: `Task title changed`, type: 'success' });
+    });
+  }
+
+  protected cancelEditing() {
+    this.setEditTitleId.emit(null);
+    this.taskTitle.set('');
   }
 }

@@ -15,7 +15,7 @@ export class App {
 export type Task = {
   id: number;
   name: string;
-  done: boolean;
+  status: 'inProgress' | 'completed';
   description?: string;
 };
 

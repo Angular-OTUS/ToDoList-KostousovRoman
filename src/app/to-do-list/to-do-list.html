@@ -1,6 +1,11 @@
 <div class="card">
   <div class="card-header">
     <h1>To Do List</h1>
+    <select [(ngModel)]="filter">
+      <option selected value="all">All</option>
+      <option value="inProgress">In progress</option>
+      <option value="completed">Completed</option>
+    </select>
     <div class="pagination">
       <mat-icon appTitle="Previous page" class="pointer" (click)="previousPage()">keyboard_arrow_left</mat-icon>
       <span>{{ currentPage() }} / {{ totalPages }}</span>
@@ -20,8 +25,5 @@
   <mat-spinner></mat-spinner>
   }
 
-  <div class="card-footer">
-    <input class="task-input" type="text" [(ngModel)]="inputValue" (keyup.enter)="addTask()" />
-    <app-button appTitle="Add" (click)="addTask()" [disabled]="validateInputValue()">Add Task</app-button>
-  </div>
+  <app-to-do-create-item></app-to-do-create-item>
 </div>
