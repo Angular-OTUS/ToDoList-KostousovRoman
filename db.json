@@ -9,17 +9,20 @@
     {
       "id": "2",
       "name": "Buy bread",
-      "status": "completed"
+      "status": "inProgress",
+      "description": ""
     },
     {
       "id": "3",
       "name": "Feed the dog",
-      "status": "inProgress"
+      "status": "inProgress",
+      "description": ""
     },
     {
       "id": "4",
       "name": "Make ToDo App",
-      "status": "inProgress"
+      "status": "inProgress",
+      "description": ""
     }
   ]
 }

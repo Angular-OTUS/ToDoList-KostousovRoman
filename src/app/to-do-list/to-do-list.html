@@ -16,8 +16,7 @@
   @if (!isLoading()) {
   <ul>
     @for (task of getSlicedTasks(); track task.id) {
-    <app-to-do-list-item [task]="task" (select)="selectItem(task.id)" [selected]="selectedItemId() === task.id"
-      (remove)="deleteTask(task.id)" [editTitle]="editTitleId() === task.id"
+    <app-to-do-list-item [task]="task" (remove)="deleteTask(task.id)" [editTitle]="editTitleId() === task.id"
       (setEditTitleId)="setEditTitleId(task.id)"></app-to-do-list-item>
     }
   </ul>
@@ -27,3 +26,5 @@
 
   <app-to-do-create-item></app-to-do-create-item>
 </div>
+
+<router-outlet></router-outlet>
