@@ -1,25 +1,25 @@
-import { inject, Injectable } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 import { Task } from '../app';
 
 @Injectable({
   providedIn: 'root',
 })
 export class TaskListService {
-  private tasks: Task[] = [];
+  tasks = signal<Task[]>([]);
 
-  getTasks(): Task[] {
-    return this.tasks;
+  getTaskById(id: Task['id']): Task | null {
+    return this.tasks().find((task) => task.id === id) || null;
   }
 
   setTasks(tasks: Task[]) {
-    this.tasks = tasks;
+    this.tasks.set(tasks);
   }
 
   addTask(task: Task) {
-    this.tasks.push(task);
+    this.tasks().push(task);
   }
 
   deleteTask(id: Task['id']) {
-    this.tasks = this.tasks.filter((task) => task.id !== id);
+    this.tasks.update((tasks) => tasks.filter((task) => task.id !== id));
   }
 }

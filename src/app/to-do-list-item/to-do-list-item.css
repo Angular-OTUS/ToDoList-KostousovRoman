@@ -43,14 +43,6 @@ h1 {
     width: 100%;
 }
 
-textarea {
-    resize: none;
-    background-color: transparent;
-    border: none;
-    color: #fff;
-    width: 100%;
-}
-
 .pop-in {
     animation: pop-in 0.3s;
 }

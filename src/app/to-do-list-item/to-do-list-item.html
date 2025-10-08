@@ -1,11 +1,10 @@
-<li class="item" [class]="{ done: task().status === 'completed', selected: selected() }" animate.enter="pop-in">
+<li class="item" [class]="{ done: task().status === 'completed' }" animate.enter="pop-in">
     <div class="item-content">
         @if (editTitle()) {
         <input type="text" [(ngModel)]="taskTitle" />
         } @else {
-        <h1 (dblclick)="setEditTitleId.emit(task().id)" (click)="select.emit(task().id)">{{ task().name }}</h1>
+        <h1 (dblclick)="setEditTitleId.emit(task().id)" (click)="selectItem(task().id)">{{ task().name }}</h1>
         }
-        <textarea [hidden]="!selected()" (change)="changeDescription($event)">{{ task().description }}</textarea>
     </div>
 
     @if (editTitle()) {

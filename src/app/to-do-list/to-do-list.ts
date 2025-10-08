@@ -12,6 +12,7 @@ import { TaskListService } from '../services/task-list';
 import { ToastService } from '../services/toast';
 import { ToDoCreateItem } from '../to-do-create-item/to-do-create-item';
 import { TaskApiService } from '../services/task-api';
+import { ActivatedRoute, Router, RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-to-do-list',
@@ -25,6 +26,7 @@ import { TaskApiService } from '../services/task-api';
     MatProgressSpinnerModule,
     Title,
     ToDoCreateItem,
+    RouterOutlet,
   ],
   templateUrl: './to-do-list.html',
   styleUrl: './to-do-list.css',
@@ -34,6 +36,8 @@ export class ToDoList implements OnInit {
   protected readonly taskListService = inject(TaskListService);
   protected readonly taskApiService = inject(TaskApiService);
   protected readonly toastService = inject(ToastService);
+  protected readonly router = inject(Router);
+  protected readonly activatedRoute = inject(ActivatedRoute);
 
   protected currentPage = signal(1);
   protected pageSize = signal(3);
@@ -42,8 +46,8 @@ export class ToDoList implements OnInit {
   }
 
   protected isLoading = signal(true);
-  protected selectedItemId = signal<Task['id'] | null>(null);
   protected editTitleId = signal<Task['id'] | null>(null);
+  protected selectedId = signal<Task['id'] | null>(null);
 
   protected filter = signal<Task['status'] | 'all'>('all');
 
@@ -52,7 +56,7 @@ export class ToDoList implements OnInit {
   }
 
   protected get tasks() {
-    return this.taskListService.getTasks();
+    return this.taskListService.tasks();
   }
 
   fetchTasks() {
@@ -99,14 +103,6 @@ export class ToDoList implements OnInit {
     return this.tasks.filter((t) => {
       return t.status === this.filter();
     });
-  }
-
-  protected selectItem(id: Task['id']) {
-    if (this.selectedItemId() === id) {
-      this.selectedItemId.set(null);
-      return;
-    }
-    this.selectedItemId.set(id);
   }
 
   protected setEditTitleId(id: Task['id'] | null) {

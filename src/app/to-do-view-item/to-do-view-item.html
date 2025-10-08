@@ -1,0 +1,5 @@
+<div class="card">
+    <mat-icon class="close" (click)="close()">close</mat-icon>
+    <h1>{{ task()?.name }}</h1>
+    <textarea (change)="changeDescription($event)" [value]="task()?.description"></textarea>
+</div>

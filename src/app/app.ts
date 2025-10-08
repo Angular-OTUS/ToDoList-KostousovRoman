@@ -16,7 +16,7 @@ export type Task = {
   id: number;
   name: string;
   status: 'inProgress' | 'completed';
-  description?: string;
+  description: string;
 };
 
 export interface ToastType {

@@ -16,6 +16,10 @@ export class TaskApiService {
     return this.http.get<Task[]>(`${this.baseUrl}/tasks`);
   }
 
+  getTaskById(id: Task['id']): Observable<Task> {
+    return this.http.get<Task>(`${this.baseUrl}/tasks/${id}`);
+  }
+
   addTask(task: Task): Observable<Task> {
     // @ts-ignore
     task.id = task.id.toString();
