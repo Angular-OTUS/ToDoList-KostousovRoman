@@ -15,7 +15,7 @@ h1 {
     font-size: 1.1rem;
 }
 
-.item.selected {
+div.link.selected > .item {
     background-color: rgba(0, 0, 0, 0.4);
 }
 

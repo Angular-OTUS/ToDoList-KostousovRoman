@@ -15,11 +15,11 @@ import { FormsModule } from '@angular/forms';
 import { ToastService } from '../services/toast';
 import { TaskApiService } from '../services/task-api';
 import { TaskListService } from '../services/task-list';
-import { Router } from '@angular/router';
+import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 
 @Component({
   selector: 'app-to-do-list-item',
-  imports: [MatCheckbox, MatIcon, MatIconModule, Title, FormsModule],
+  imports: [MatCheckbox, MatIcon, MatIconModule, Title, FormsModule, RouterLink, RouterLinkActive],
   templateUrl: './to-do-list-item.html',
   styleUrl: './to-do-list-item.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -54,9 +54,5 @@ export class ToDoListItem {
   protected cancelEditing() {
     this.setEditTitleId.emit(null);
     this.taskTitle.set('');
-  }
-
-  protected selectItem(id: Task['id']) {
-    this.router.navigate(['tasks', id]);
   }
 }
