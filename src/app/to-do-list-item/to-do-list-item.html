@@ -1,23 +1,24 @@
-<li class="item" [class]="{ done: task().status === 'completed', selected: selected() }" animate.enter="pop-in">
-    <div class="item-content">
-        @if (editTitle()) {
-        <input type="text" [(ngModel)]="taskTitle" />
-        } @else {
-        <h1 (dblclick)="setEditTitleId.emit(task().id)" (click)="select.emit(task().id)">{{ task().name }}</h1>
-        }
-        <textarea [hidden]="!selected()" (change)="changeDescription($event)">{{ task().description }}</textarea>
-    </div>
+<div class="link" [routerLink]="['/tasks', task().id]" routerLinkActive="selected">
+    <li class="item" [class]="{ done: task().status === 'completed' }" animate.enter="pop-in">
+        <div class="item-content">
+            @if (editTitle()) {
+            <input type="text" [(ngModel)]="taskTitle" />
+            } @else {
+            <h1 (dblclick)="setEditTitleId.emit(task().id)">{{ task().name }}</h1>
+            }
+        </div>
 
-    @if (editTitle()) {
-    <div class="item-controls">
-        <mat-icon appTitle="Save" (click)="saveTitle()">save</mat-icon>
-        <mat-icon appTitle="Cancel" (click)="cancelEditing()">cancel</mat-icon>
-    </div>
-    } @else {
-    <div class="item-controls">
-        <mat-checkbox appTitle="Done" class="done" [checked]="task().status === 'completed'"
-            (change)="toggleDone(task())"></mat-checkbox>
-        <mat-icon appTitle="Delete" class="button-delete" (click)="remove.emit(task().id)">delete</mat-icon>
-    </div>
-    }
-</li>
+        @if (editTitle()) {
+        <div class="item-controls">
+            <mat-icon appTitle="Save" (click)="saveTitle()">save</mat-icon>
+            <mat-icon appTitle="Cancel" (click)="cancelEditing()">cancel</mat-icon>
+        </div>
+        } @else {
+        <div class="item-controls">
+            <mat-checkbox appTitle="Done" class="done" [checked]="task().status === 'completed'"
+                (change)="toggleDone(task())"></mat-checkbox>
+            <mat-icon appTitle="Delete" class="button-delete" (click)="remove.emit(task().id)">delete</mat-icon>
+        </div>
+        }
+    </li>
+</div>

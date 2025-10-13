@@ -15,7 +15,7 @@ h1 {
     font-size: 1.1rem;
 }
 
-.item.selected {
+div.link.selected > .item {
     background-color: rgba(0, 0, 0, 0.4);
 }
 
@@ -40,14 +40,6 @@ h1 {
 .item-content {
     display: flex;
     flex-direction: column;
-    width: 100%;
-}
-
-textarea {
-    resize: none;
-    background-color: transparent;
-    border: none;
-    color: #fff;
     width: 100%;
 }
 
