@@ -3,7 +3,6 @@ import { Button } from '../shared/button/button';
 import { FormsModule } from '@angular/forms';
 import { TaskListService } from '../services/task-list';
 import { ToastService } from '../services/toast';
-import { TaskApiService } from '../services/task-api';
 import { Task } from '../app';
 
 @Component({
@@ -16,7 +15,6 @@ import { Task } from '../app';
 export class ToDoCreateItem {
   inputValue = model('');
   taskListService = inject(TaskListService);
-  taskApiService = inject(TaskApiService);
   toastService = inject(ToastService);
 
   protected get tasks() {
@@ -31,14 +29,11 @@ export class ToDoCreateItem {
     const task = {
       id: Math.max(...this.tasks.map((t) => t.id)) + 1,
       name: this.inputValue(),
-      status: 'inProgress',
+      status: 'todo',
       description: '',
     } as Task;
 
     this.taskListService.addTask(task);
-    this.taskApiService.addTask(task).subscribe(() => {
-      this.toastService.add({ message: 'Task added', type: 'success' });
-    });
 
     this.inputValue.set('');
   }

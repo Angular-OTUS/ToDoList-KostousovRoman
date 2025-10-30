@@ -1,10 +1,11 @@
 import { Component, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { Toast } from './toast/toast';
+import { Header } from './header/header';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, Toast],
+  imports: [RouterOutlet, Toast, Header],
   templateUrl: './app.html',
   styleUrl: './app.css',
 })
@@ -15,7 +16,7 @@ export class App {
 export type Task = {
   id: number;
   name: string;
-  status: 'inProgress' | 'completed';
+  status: 'todo' | 'inProgress' | 'completed';
   description: string;
 };
 

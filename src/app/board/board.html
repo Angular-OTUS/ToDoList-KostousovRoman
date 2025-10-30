@@ -1,0 +1,10 @@
+<div class="card">
+    @for (status of taskStatuses; track status) {
+    <div class="taskboard">
+        <div class="header">{{ status }} ({{ filteredTasks(status).length }})</div>
+        @for (task of filteredTasks(status); track task.id) {
+        <app-to-do-list-item [task]="task"></app-to-do-list-item>
+        }
+    </div>
+    }
+</div>
