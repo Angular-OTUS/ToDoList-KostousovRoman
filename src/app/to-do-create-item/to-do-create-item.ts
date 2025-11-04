@@ -17,17 +17,15 @@ export class ToDoCreateItem {
   taskListService = inject(TaskListService);
   toastService = inject(ToastService);
 
-  protected get tasks() {
-    return this.taskListService.tasks();
-  }
-
-  protected validateInputValue() {
+  protected validateInputValue(): boolean {
     return !this.inputValue().trim();
   }
 
-  protected addTask() {
+  protected addTask(): void {
+    const currentTasks = this.taskListService.tasks();
+
     const task = {
-      id: Math.max(...this.tasks.map((t) => t.id)) + 1,
+      id: currentTasks.length > 0 ? Math.max(...currentTasks.map((t) => t.id)) + 1 : 1,
       name: this.inputValue(),
       status: 'todo',
       description: '',

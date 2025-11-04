@@ -25,7 +25,7 @@ export class ToDoListItem {
 
   protected taskTitle = signal('');
 
-  protected saveTitle() {
+  protected saveTitle(): void {
     this.task().name = this.taskTitle();
     this.taskTitle.set('');
     this.setEditTitleId.emit(null);
@@ -33,12 +33,12 @@ export class ToDoListItem {
     this.taskListService.updateTask(this.task());
   }
 
-  protected cancelEditing() {
+  protected cancelEditing(): void {
     this.setEditTitleId.emit(null);
     this.taskTitle.set('');
   }
 
-  protected remove($event: Event) {
+  protected remove($event: Event): void {
     $event.stopPropagation();
     this.taskListService.deleteTask(this.task().id);
   }

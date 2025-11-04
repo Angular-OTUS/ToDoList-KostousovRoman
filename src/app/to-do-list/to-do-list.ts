@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { MatIcon } from '@angular/material/icon';
 import { MatIconModule } from '@angular/material/icon';
 import { FormsModule } from '@angular/forms';
@@ -39,9 +39,9 @@ export class ToDoList {
 
   protected currentPage = signal(1);
   protected pageSize = signal(3);
-  protected get totalPages() {
+  protected totalPages = computed(() => {
     return Math.ceil(this.getFilteredTasks().length / this.pageSize());
-  }
+  });
 
   protected isLoading = this.taskListService.isLoading;
   protected editTitleId = signal<Task['id'] | null>(null);
@@ -53,19 +53,15 @@ export class ToDoList {
     this.fetchTasks();
   }
 
-  protected get tasks() {
-    return this.taskListService.tasks();
-  }
-
-  fetchTasks() {
+  fetchTasks(): void {
     this.taskListService.fetchTasks();
   }
 
-  protected deleteTask(id: Task['id']) {
+  protected deleteTask(id: Task['id']): void {
     this.taskListService.deleteTask(id);
   }
 
-  protected previousPage() {
+  protected previousPage(): void {
     if (this.currentPage() > 1) {
       this.currentPage.update((v) => v - 1);
     } else {
@@ -73,30 +69,30 @@ export class ToDoList {
     }
   }
 
-  protected nextPage() {
-    if (this.currentPage() < this.totalPages) {
+  protected nextPage(): void {
+    if (this.currentPage() < this.totalPages()) {
       this.currentPage.update((v) => v + 1);
     } else {
       this.toastService.add({ message: 'Maximum page reached', type: 'warning' });
     }
   }
 
-  protected getSlicedTasks() {
+  protected getSlicedTasks(): Task[] {
     const page = this.currentPage();
     const pageSize = this.pageSize();
     return this.getFilteredTasks().slice((page - 1) * pageSize, page * pageSize);
   }
 
-  protected getFilteredTasks() {
+  protected getFilteredTasks(): Task[] {
     if (this.filter() === 'all') {
-      return this.tasks;
+      return this.taskListService.tasks();
     }
-    return this.tasks.filter((t) => {
+    return this.taskListService.tasks().filter((t) => {
       return t.status === this.filter();
     });
   }
 
-  protected setEditTitleId(id: Task['id'] | null) {
+  protected setEditTitleId(id: Task['id'] | null): void {
     if (this.editTitleId() === id) {
       this.editTitleId.set(null);
       return;

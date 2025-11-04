@@ -14,12 +14,8 @@ export class Board {
 
   protected taskStatuses: Task['status'][] = ['todo', 'inProgress', 'completed'];
 
-  tasks() {
-    return this.taskListService.tasks();
-  }
-
-  filteredTasks(status: Task['status']) {
-    return this.tasks().filter((task) => task.status === status);
+  filteredTasks(status: Task['status']): Task[] {
+    return this.taskListService.tasks().filter((task) => task.status === status);
   }
 
   ngOnInit() {
