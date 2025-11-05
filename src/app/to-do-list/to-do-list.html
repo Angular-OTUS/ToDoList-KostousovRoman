@@ -3,12 +3,13 @@
     <h1>To Do List</h1>
     <select [(ngModel)]="filter">
       <option selected value="all">All</option>
+      <option value="todo">To do</option>
       <option value="inProgress">In progress</option>
       <option value="completed">Completed</option>
     </select>
     <div class="pagination">
       <mat-icon appTitle="Previous page" class="pointer" (click)="previousPage()">keyboard_arrow_left</mat-icon>
-      <span>{{ currentPage() }} / {{ totalPages }}</span>
+      <span>{{ currentPage() }} / {{ totalPages() }}</span>
       <mat-icon appTitle="Next page" class="pointer" (click)="nextPage()">keyboard_arrow_right</mat-icon>
     </div>
   </div>
@@ -16,7 +17,7 @@
   @if (!isLoading()) {
   <ul>
     @for (task of getSlicedTasks(); track task.id) {
-    <app-to-do-list-item [task]="task" (remove)="deleteTask(task.id)" [editTitle]="editTitleId() === task.id"
+    <app-to-do-list-item [task]="task" [editTitle]="editTitleId() === task.id"
       (setEditTitleId)="setEditTitleId(task.id)"></app-to-do-list-item>
     }
   </ul>

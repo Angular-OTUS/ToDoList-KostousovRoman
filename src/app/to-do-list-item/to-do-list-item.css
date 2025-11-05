@@ -8,6 +8,7 @@
     margin-bottom: 10px;
     background-color: rgba(0, 0, 0, 0.2);
     overflow-wrap: anywhere;
+    min-height: 55px;
 }
 
 h1 {
@@ -17,6 +18,10 @@ h1 {
 
 div.link.selected > .item {
     background-color: rgba(0, 0, 0, 0.4);
+}
+
+div.link.selected > .item.done {
+    background-color: rgba(0, 255, 0, 0.4);
 }
 
 .item.done {

@@ -4,11 +4,11 @@ import { ToDoViewItem } from './to-do-view-item/to-do-view-item';
 export const routes: Routes = [
   {
     path: '',
-    redirectTo: 'tasks',
+    redirectTo: 'backlog',
     pathMatch: 'full',
   },
   {
-    path: 'tasks',
+    path: 'backlog',
     loadComponent: () => import('./to-do-list/to-do-list').then((m) => m.ToDoList),
     children: [
       {
@@ -18,7 +18,11 @@ export const routes: Routes = [
     ],
   },
   {
+    path: 'board',
+    loadComponent: () => import('./board/board').then((m) => m.Board),
+  },
+  {
     path: '**',
-    redirectTo: 'tasks',
+    redirectTo: 'backlog',
   },
 ];

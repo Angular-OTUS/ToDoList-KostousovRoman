@@ -1,0 +1,10 @@
+.header {
+    color: #9c9c9c;
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+.card {
+    flex-direction: row;
+    width: unset;
+}

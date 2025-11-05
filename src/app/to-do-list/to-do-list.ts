@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { MatIcon } from '@angular/material/icon';
 import { MatIconModule } from '@angular/material/icon';
 import { FormsModule } from '@angular/forms';
@@ -11,7 +11,6 @@ import { Title } from '../shared/title/title';
 import { TaskListService } from '../services/task-list';
 import { ToastService } from '../services/toast';
 import { ToDoCreateItem } from '../to-do-create-item/to-do-create-item';
-import { TaskApiService } from '../services/task-api';
 import { ActivatedRoute, Router, RouterOutlet } from '@angular/router';
 
 @Component({
@@ -32,20 +31,19 @@ import { ActivatedRoute, Router, RouterOutlet } from '@angular/router';
   styleUrl: './to-do-list.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ToDoList implements OnInit {
+export class ToDoList {
   protected readonly taskListService = inject(TaskListService);
-  protected readonly taskApiService = inject(TaskApiService);
   protected readonly toastService = inject(ToastService);
   protected readonly router = inject(Router);
   protected readonly activatedRoute = inject(ActivatedRoute);
 
   protected currentPage = signal(1);
   protected pageSize = signal(3);
-  protected get totalPages() {
+  protected totalPages = computed(() => {
     return Math.ceil(this.getFilteredTasks().length / this.pageSize());
-  }
+  });
 
-  protected isLoading = signal(true);
+  protected isLoading = this.taskListService.isLoading;
   protected editTitleId = signal<Task['id'] | null>(null);
   protected selectedId = signal<Task['id'] | null>(null);
 
@@ -55,26 +53,15 @@ export class ToDoList implements OnInit {
     this.fetchTasks();
   }
 
-  protected get tasks() {
-    return this.taskListService.tasks();
+  fetchTasks(): void {
+    this.taskListService.fetchTasks();
   }
 
-  fetchTasks() {
-    this.isLoading.set(true);
-    this.taskApiService.getTasks().subscribe((tasks: Task[]) => {
-      this.taskListService.setTasks(tasks);
-      this.isLoading.set(false);
-    });
+  protected deleteTask(id: Task['id']): void {
+    this.taskListService.deleteTask(id);
   }
 
-  protected deleteTask(id: Task['id']) {
-    this.taskApiService.deleteTask(id).subscribe(() => {
-      this.fetchTasks();
-      this.toastService.add({ message: `Task ${id} deleted`, type: 'success' });
-    });
-  }
-
-  protected previousPage() {
+  protected previousPage(): void {
     if (this.currentPage() > 1) {
       this.currentPage.update((v) => v - 1);
     } else {
@@ -82,30 +69,30 @@ export class ToDoList implements OnInit {
     }
   }
 
-  protected nextPage() {
-    if (this.currentPage() < this.totalPages) {
+  protected nextPage(): void {
+    if (this.currentPage() < this.totalPages()) {
       this.currentPage.update((v) => v + 1);
     } else {
       this.toastService.add({ message: 'Maximum page reached', type: 'warning' });
     }
   }
 
-  protected getSlicedTasks() {
+  protected getSlicedTasks(): Task[] {
     const page = this.currentPage();
     const pageSize = this.pageSize();
     return this.getFilteredTasks().slice((page - 1) * pageSize, page * pageSize);
   }
 
-  protected getFilteredTasks() {
+  protected getFilteredTasks(): Task[] {
     if (this.filter() === 'all') {
-      return this.tasks;
+      return this.taskListService.tasks();
     }
-    return this.tasks.filter((t) => {
+    return this.taskListService.tasks().filter((t) => {
       return t.status === this.filter();
     });
   }
 
-  protected setEditTitleId(id: Task['id'] | null) {
+  protected setEditTitleId(id: Task['id'] | null): void {
     if (this.editTitleId() === id) {
       this.editTitleId.set(null);
       return;

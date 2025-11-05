@@ -3,13 +3,13 @@
     {
       "id": "1",
       "name": "Buy milk",
-      "status": "inProgress",
+      "status": "todo",
       "description": "Buy milk from the store"
     },
     {
       "id": "2",
       "name": "Buy bread",
-      "status": "inProgress",
+      "status": "todo",
       "description": ""
     },
     {
@@ -21,7 +21,7 @@
     {
       "id": "4",
       "name": "Make ToDo App",
-      "status": "inProgress",
+      "status": "completed",
       "description": ""
     }
   ]
