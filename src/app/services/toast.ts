@@ -1,18 +1,23 @@
-import { Injectable, signal } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { ToastType } from '../app';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ToastService {
-  public toasts = signal<ToastType[]>([]);
+  private toasts$ = new BehaviorSubject<ToastType[]>([]);
   private timeout = 5000;
 
+  public get toasts() {
+    return this.toasts$.asObservable();
+  }
+
   add(toast: ToastType) {
-    toast.id = Math.max(0, ...this.toasts().map((t) => t?.id || 1)) + 1;
-    this.toasts.update((t) => [...t, toast]);
+    toast.id = this.toasts$.value.length + 1;
+    this.toasts$.next([...this.toasts$.value, toast]);
     setTimeout(() => {
-      this.toasts.update((t) => t.filter((t) => t.id !== toast.id));
+      this.toasts$.next(this.toasts$.value.filter((t: ToastType) => t.id !== toast.id));
     }, this.timeout);
   }
 }
