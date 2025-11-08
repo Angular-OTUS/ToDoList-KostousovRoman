@@ -19,9 +19,16 @@ export class TaskListService {
 
   fetchTasks() {
     this.isLoading.set(true);
-    this.http.get<Task[]>(`${this.baseUrl}/tasks`).subscribe((tasks) => {
-      this.tasks$.next(tasks);
-      this.isLoading.set(false);
+    this.http.get<Task[]>(`${this.baseUrl}/tasks`).subscribe({
+      next: (tasks) => {
+        this.tasks$.next(tasks);
+      },
+      error: () => {
+        this.tasks$.next([]);
+      },
+      complete: () => {
+        this.isLoading.set(false);
+      },
     });
   }
 

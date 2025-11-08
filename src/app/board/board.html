@@ -1,8 +1,8 @@
 <div class="card">
     @for (status of taskStatuses; track status) {
     <div class="taskboard">
-        <div class="header">{{ status }} ({{ (filteredTasks(status) | async)?.length }})</div>
-        @for (task of filteredTasks(status) | async; track task.id) {
+        <div class="header">{{ status }} ({{ (filteredTasks.get(status) | async)?.length }})</div>
+        @for (task of filteredTasks.get(status) | async; track task.id) {
         <app-to-do-list-item [task]="task"></app-to-do-list-item>
         }
     </div>

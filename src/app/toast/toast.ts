@@ -14,14 +14,9 @@ import { AsyncPipe } from '@angular/common';
 export class Toast {
   protected readonly toastService = inject(ToastService);
 
-  protected getIcon(type: ToastType['type']) {
-    switch (type) {
-      case 'success':
-        return 'check';
-      case 'warning':
-        return 'warning';
-      case 'error':
-        return 'error';
-    }
-  }
+  protected icons = new Map<ToastType['type'], string>([
+    ['success', 'check'],
+    ['warning', 'warning'],
+    ['error', 'error'],
+  ]);
 }
