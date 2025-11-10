@@ -22,10 +22,7 @@ export class ToDoCreateItem {
   }
 
   protected addTask(): void {
-    const currentTasks = this.taskListService.tasks();
-
     const task = {
-      id: currentTasks.length > 0 ? Math.max(...currentTasks.map((t) => t.id)) + 1 : 1,
       name: this.inputValue(),
       status: 'todo',
       description: '',

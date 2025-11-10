@@ -1,12 +1,12 @@
 <div class="card">
   <div class="card-header">
     <h1>To Do List</h1>
-    <select [(ngModel)]="filter">
+    <!-- <select [(ngModel)]="filter$">
       <option selected value="all">All</option>
       <option value="todo">To do</option>
       <option value="inProgress">In progress</option>
       <option value="completed">Completed</option>
-    </select>
+    </select> -->
     <div class="pagination">
       <mat-icon appTitle="Previous page" class="pointer" (click)="previousPage()">keyboard_arrow_left</mat-icon>
       <span>{{ currentPage() }} / {{ totalPages() }}</span>
@@ -16,7 +16,7 @@
 
   @if (!isLoading()) {
   <ul>
-    @for (task of getSlicedTasks(); track task.id) {
+    @for (task of getSlicedTasks() | async; track task.id) {
     <app-to-do-list-item [task]="task" [editTitle]="editTitleId() === task.id"
       (setEditTitleId)="setEditTitleId(task.id)"></app-to-do-list-item>
     }

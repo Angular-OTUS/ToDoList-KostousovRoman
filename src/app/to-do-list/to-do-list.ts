@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { MatIcon } from '@angular/material/icon';
 import { MatIconModule } from '@angular/material/icon';
 import { FormsModule } from '@angular/forms';
@@ -12,6 +12,9 @@ import { TaskListService } from '../services/task-list';
 import { ToastService } from '../services/toast';
 import { ToDoCreateItem } from '../to-do-create-item/to-do-create-item';
 import { ActivatedRoute, Router, RouterOutlet } from '@angular/router';
+import { AsyncPipe } from '@angular/common';
+import { BehaviorSubject, map, Observable } from 'rxjs';
+import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-to-do-list',
@@ -26,6 +29,7 @@ import { ActivatedRoute, Router, RouterOutlet } from '@angular/router';
     Title,
     ToDoCreateItem,
     RouterOutlet,
+    AsyncPipe,
   ],
   templateUrl: './to-do-list.html',
   styleUrl: './to-do-list.css',
@@ -37,17 +41,20 @@ export class ToDoList {
   protected readonly router = inject(Router);
   protected readonly activatedRoute = inject(ActivatedRoute);
 
+  protected filter$ = new BehaviorSubject<Task['status'] | 'all'>('all');
+
   protected currentPage = signal(1);
   protected pageSize = signal(3);
-  protected totalPages = computed(() => {
-    return Math.ceil(this.getFilteredTasks().length / this.pageSize());
-  });
+  protected totalPages = toSignal(
+    this.getFilteredTasks().pipe(map((tasks) => Math.ceil(tasks.length / this.pageSize()))),
+    {
+      initialValue: 1,
+    }
+  );
 
   protected isLoading = this.taskListService.isLoading;
   protected editTitleId = signal<Task['id'] | null>(null);
   protected selectedId = signal<Task['id'] | null>(null);
-
-  protected filter = signal<Task['status'] | 'all'>('all');
 
   ngOnInit() {
     this.fetchTasks();
@@ -77,19 +84,21 @@ export class ToDoList {
     }
   }
 
-  protected getSlicedTasks(): Task[] {
+  protected getSlicedTasks(): Observable<Task[]> {
     const page = this.currentPage();
     const pageSize = this.pageSize();
-    return this.getFilteredTasks().slice((page - 1) * pageSize, page * pageSize);
+    return this.getFilteredTasks().pipe(
+      map((tasks) => tasks.slice((page - 1) * pageSize, page * pageSize))
+    );
   }
 
-  protected getFilteredTasks(): Task[] {
-    if (this.filter() === 'all') {
-      return this.taskListService.tasks();
+  protected getFilteredTasks(): Observable<Task[]> {
+    if (this.filter$.value === 'all') {
+      return this.taskListService.tasks;
     }
-    return this.taskListService.tasks().filter((t) => {
-      return t.status === this.filter();
-    });
+    return this.taskListService.tasks.pipe(
+      map((tasks) => tasks.filter((t) => t.status === this.filter$.value))
+    );
   }
 
   protected setEditTitleId(id: Task['id'] | null): void {
