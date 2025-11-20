@@ -1,12 +1,6 @@
 <div class="card">
   <div class="card-header">
-    <h1>To Do List</h1>
-    <!-- <select [(ngModel)]="filter$">
-      <option selected value="all">All</option>
-      <option value="todo">To do</option>
-      <option value="inProgress">In progress</option>
-      <option value="completed">Completed</option>
-    </select> -->
+    <h1>{{ 'todo_list' | translate }}</h1>
     <div class="pagination">
       <mat-icon appTitle="Previous page" class="pointer" (click)="previousPage()">keyboard_arrow_left</mat-icon>
       <span>{{ currentPage() }} / {{ totalPages() }}</span>

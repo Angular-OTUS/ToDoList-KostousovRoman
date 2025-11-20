@@ -5,10 +5,11 @@ import { MatIcon } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
 import { FormsModule } from '@angular/forms';
 import { TaskListService } from '../services/task-list';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-to-do-view-item',
-  imports: [MatIcon, MatSelectModule, FormsModule],
+  imports: [MatIcon, MatSelectModule, FormsModule, TranslatePipe],
   templateUrl: './to-do-view-item.html',
   styleUrl: './to-do-view-item.css',
   changeDetection: ChangeDetectionStrategy.OnPush,

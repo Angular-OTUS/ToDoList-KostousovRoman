@@ -18,3 +18,11 @@
     outline: 1px solid #fff;
     border-radius: 5px;
 }
+
+.lang {
+    cursor: pointer;
+    padding: 10px;
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
+    margin-left: auto;
+}

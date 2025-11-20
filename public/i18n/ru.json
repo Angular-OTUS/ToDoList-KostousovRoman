@@ -1,0 +1,10 @@
+{
+  "todo_list": "To Do список",
+  "add_task": "Добавить задачу",
+  "status": "Статус",
+  "todo": "To Do",
+  "inProgress": "В процессе",
+  "completed": "Завершено",
+  "backlog": "Бэклог",
+  "board": "Доска"
+}

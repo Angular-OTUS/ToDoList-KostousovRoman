@@ -3,11 +3,11 @@
     <h1>{{ task()?.name }}</h1>
     <textarea (change)="changeDescription($event)" [value]="task()?.description"></textarea>
     <mat-form-field>
-        <mat-label>Status</mat-label>
+        <mat-label>{{ 'status' | translate }}</mat-label>
         <mat-select [value]="task()?.status" (selectionChange)="changeStatus($event.value)">
-            <mat-option value="todo">To do</mat-option>
-            <mat-option value="inProgress">In progress</mat-option>
-            <mat-option value="completed">Completed</mat-option>
+            <mat-option value="todo">{{ 'todo' | translate }}</mat-option>
+            <mat-option value="inProgress">{{ 'inProgress' | translate }}</mat-option>
+            <mat-option value="completed">{{ 'completed' | translate }}</mat-option>
         </mat-select>
     </mat-form-field>
 </div>

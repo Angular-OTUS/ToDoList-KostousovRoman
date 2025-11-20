@@ -1,13 +1,14 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { TaskListService } from '../services/task-list';
 import { ToDoListItem } from '../to-do-list-item/to-do-list-item';
 import { Task } from '../app';
 import { map, Observable } from 'rxjs';
 import { AsyncPipe } from '@angular/common';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-board',
-  imports: [ToDoListItem, AsyncPipe],
+  imports: [ToDoListItem, AsyncPipe, TranslatePipe],
   templateUrl: './board.html',
   styleUrl: './board.css',
 })
