@@ -1,4 +1,5 @@
 <div class="card">
-    <div routerLinkActive="active" class="link" routerLink="backlog">Backlog</div>
-    <div routerLinkActive="active" class="link" routerLink="board">Board</div>
+    <div routerLinkActive="active" class="link" routerLink="backlog">{{ 'backlog' | translate }}</div>
+    <div routerLinkActive="active" class="link" routerLink="board">{{ 'board' | translate }}</div>
+    <div class="lang" (click)="switchLanguage()">{{ translate.getCurrentLang() }}</div>
 </div>

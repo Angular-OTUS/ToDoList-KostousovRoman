@@ -1,4 +1,5 @@
 <div class="card-footer">
   <input class="task-input" type="text" [(ngModel)]="inputValue" (keyup.enter)="addTask()" />
-  <app-button appTitle="Add" (click)="addTask()" [disabled]="validateInputValue()">Add Task</app-button>
+  <app-button appTitle="Add" (click)="addTask()" [disabled]="validateInputValue()">{{ 'add_task' | translate
+    }}</app-button>
 </div>

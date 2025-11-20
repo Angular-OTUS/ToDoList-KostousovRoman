@@ -15,6 +15,7 @@ import { ActivatedRoute, Router, RouterOutlet } from '@angular/router';
 import { AsyncPipe } from '@angular/common';
 import { BehaviorSubject, map, Observable } from 'rxjs';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-to-do-list',
@@ -30,6 +31,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
     ToDoCreateItem,
     RouterOutlet,
     AsyncPipe,
+    TranslatePipe,
   ],
   templateUrl: './to-do-list.html',
   styleUrl: './to-do-list.css',

@@ -1,13 +1,14 @@
-import { ChangeDetectionStrategy, Component, inject, input, model, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, model } from '@angular/core';
 import { Button } from '../shared/button/button';
 import { FormsModule } from '@angular/forms';
 import { TaskListService } from '../services/task-list';
 import { ToastService } from '../services/toast';
 import { Task } from '../app';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-to-do-create-item',
-  imports: [Button, FormsModule],
+  imports: [Button, FormsModule, TranslatePipe],
   templateUrl: './to-do-create-item.html',
   styleUrl: './to-do-create-item.css',
   changeDetection: ChangeDetectionStrategy.OnPush,

@@ -1,0 +1,10 @@
+{
+  "todo_list": "To Do List",
+  "add_task": "Add Task",
+  "status": "Status",
+  "todo": "To Do",
+  "inProgress": "In Progress",
+  "completed": "Completed",
+  "backlog": "Backlog",
+  "board": "Board"
+}
